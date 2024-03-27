@@ -9,11 +9,11 @@ function Square({value, onSquareClick}) {
   }
 
 export default function Board() {
-  const [xIsNext, setXIsNext] = useState(true)
+  const [xIsNext, setXIsNext] = useState(true);
   const [squares,setSquares] = useState(Array(9).fill(null));
   function handleClick(i) {
-    if (squares[i]){
-        return
+    if ( calculateWinner(squares) || squares[i] ){
+        return;
     }
     const nextSquares = squares.slice();    // creates a copy of the "squares" array into "nextSquares"
     if(xIsNext){
@@ -25,8 +25,18 @@ export default function Board() {
     setSquares(nextSquares);                // updates squares on screen to new squares
     setXIsNext(!xIsNext);                   // flip between X and O
   }
+
+  const winner = calculateWinner(squares);
+  let status;
+  if (winner){
+    status = "Winner: " + winner;
+  } else{
+    status = "Next player: " + (xIsNext ? "X" : "O");
+  }
+
   return (
     <>
+        <div className="status">{status}</div>
         <div className = "board-row">
             <Square value={squares[0]} onSquareClick={()=> handleClick(0)} />
             <Square value={squares[1]} onSquareClick={()=> handleClick(1)}/>
@@ -45,3 +55,24 @@ export default function Board() {
     </>
   );
 }
+
+function calculateWinner(squares) {
+    const lines = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],    // Horizontal win conditions
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],   // Vertical win conditions
+      [0, 4, 8],
+      [2, 4, 6]   //Diagonal win conditions
+    ];
+    for (let i = 0; i < lines.length; i++) {
+      const [a, b, c] = lines[i];        // Cycles through win conditions
+      if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {   
+        // Checks if the values in the indexes of 'square' are the same, and if they match win condition.
+        return squares[a];
+      }
+    }
+    return null;
+  }
