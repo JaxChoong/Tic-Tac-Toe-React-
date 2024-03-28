@@ -3,7 +3,7 @@
 2. Run "npm start" to run a local server.
 
 
-# How to PLay:
+# How to Play:
 1. First move is 'X'
 2. If you want to restart the game, just click on "Jump to game start".
 3. Click on 'Jump to Move #' to jump back to the corresponding move.
